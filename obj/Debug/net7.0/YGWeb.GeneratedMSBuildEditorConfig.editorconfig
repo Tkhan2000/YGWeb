@@ -16,6 +16,10 @@ build_property.GenerateRazorMetadataSourceChecksumAttributes =
 build_property.MSBuildProjectDirectory = C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb
 build_property._RazorSourceGeneratorDebug = 
 
+[C:/Users/TomKh/Documents/Assignments/Personal Projects/YGWeb/Views/Home/CardList.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxDYXJkTGlzdC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/TomKh/Documents/Assignments/Personal Projects/YGWeb/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
