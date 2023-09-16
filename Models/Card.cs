@@ -22,9 +22,9 @@ namespace YGWeb.Models
         public string attribute { get; set; }
 
         public string archetype { get; set; }
-        public string description { get; set; }
+        public string desc { get; set; }
 
-        public string imageURL { get; set; }
+        public string image_url { get; set; }
 
     }
 }

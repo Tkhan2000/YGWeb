@@ -221,3 +221,4 @@ C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\ru
 C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\obj\Debug\net7.0\YGWeb.csproj.AssemblyReference.cache
 C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\obj\Debug\net7.0\YGWeb.csproj.CopyComplete
+C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\Data\cardbase.json
