@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Card>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Card Database</h1>
+
+<table class="table table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>
+                Card Image
+            </th>
+            <th>
+                Card Name
+            </th>
+            <th>
+                Card Type
+            </th>
+            <th>
+                Card Race
+            </th>
+            <th>
+                Card Desctiption
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var obj in Model.Take(1000))
+        {
+            <tr>
+                <td width="20%">
+                    <img src="@obj.image_url" height="200">
+                </td>
+                <td width="20%">
+                    @obj.name
+                </td>
+                <td width="20%">
+                    @obj.type
+                </td>
+                <td width="20%">
+                    @obj.race
+                </td>
+                <td width="20%">
+                    @obj.description
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
