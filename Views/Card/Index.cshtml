@@ -70,7 +70,9 @@
             {
                 <tr>
                     <td width="20%">
+                        <a href="@obj.image_url" target="_blank">
                         <img src="@obj.image_url" height="200">
+                        </a>
                     </td>
                     <td width="20%">
                         @obj.name
@@ -92,9 +94,6 @@
 
 @using (Html.BeginForm())
 {
-    <p>
-        Current Page Number: @ViewBag.pageNumber
-    </p>
     <div>
         <a class="btn btn-primary" href="@Url.Action("Index", "Card", new{searchString = ViewBag.searchString, cardType = ViewBag.cardType, page = ViewBag.previousPage})">Previous Page</a>
         @{
@@ -112,7 +111,14 @@
             foreach(var pageNumber in pageRange)
             {
                 <a class="btn btn-primary" href="@Url.Action("Index", "Card", new{searchString = ViewBag.searchString, cardType = ViewBag.cardType, page = pageNumber})">
-                    @pageNumber
+                    @if (pageNumber == current)
+                    {
+                        <b style="font-size:17px">@pageNumber</b>
+                    }
+                    else
+                    {
+                        @pageNumber
+                    }
                 </a>
             }
         }
