@@ -4,33 +4,40 @@
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Size = Model.Count();
+    ViewBag.nextPage = ViewBag.pageNumber;
+    ViewBag.previousPage = ViewBag.pageNumber;
+
+    if (ViewBag.lastPage > 5)
+        ViewBag.chunks = 5;
+    else
+        ViewBag.chunks = ViewBag.lastPage;
+
+    if (ViewBag.pageNumber < ViewBag.lastPage)
+        ViewBag.nextPage = ViewBag.pageNumber + 1;
+    if (ViewBag.pageNumber > 1)
+        ViewBag.previousPage = ViewBag.pageNumber - 1;
 }
 
 <h1>Card Database</h1>
 
 <div class="border p-3 mt-4">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Index", "Card", new{page = 1}))
     {
         <p>
-            Find by name: @Html.TextBox("SearchString")
-            <input type="submit" value="Search" />
+            Filter Options:
         </p>
         <p>
-            Filter Results:
+            Find by name: @Html.TextBox("SearchString")
         </p>
-        <fieldset>
-            Card Type
+        <p>
+            Card Type:
             @Html.DropDownList("CardType",
             new SelectList(Enum.GetValues(typeof(cardType))),
             "Select Card Type")
-            <p>
-                <input type="submit" value="Submit" />
-            </p>
-
-            Card
-
-        </fieldset>
+        </p>
+        <p style="padding-top:5px">
+            <input type="submit" value="Submit" />
+        </p>
     }
 
 </div>
@@ -57,36 +64,59 @@
         </tr>
     </thead>
     <tbody>
-        @foreach(var obj in Model.Take(100))
+        @if (Model != null)
         {
-            <tr>
-                <td width="20%">
-                    <img src="@obj.image_url" height="200">
-                </td>
-                <td width="20%">
-                    @obj.name
-                </td>
-                <td width="20%">
-                    @obj.type
-                </td>
-                <td width="20%">
-                    @obj.race
-                </td>
-                <td width="20%">
-                    @obj.description
-                </td>
-            </tr>
+            foreach(var obj in Model)
+            {
+                <tr>
+                    <td width="20%">
+                        <img src="@obj.image_url" height="200">
+                    </td>
+                    <td width="20%">
+                        @obj.name
+                    </td>
+                    <td width="20%">
+                        @obj.type
+                    </td>
+                    <td width="20%">
+                        @obj.race
+                    </td>
+                    <td width="20%">
+                        @obj.description
+                    </td>
+                </tr>
+            }
         }
     </tbody>
 </table>
 
-
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#1">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav>
+@using (Html.BeginForm())
+{
+    <p>
+        Current Page Number: @ViewBag.pageNumber
+    </p>
+    <div>
+        <a class="btn btn-primary" href="@Url.Action("Index", "Card", new{searchString = ViewBag.searchString, cardType = ViewBag.cardType, page = ViewBag.previousPage})">Previous Page</a>
+        @{
+            int current = ViewBag.pageNumber;
+            int last = ViewBag.lastPage;
+            int min = current - 2;
+            int max = current + 2;
+            int count = ViewBag.chunks;
+            while(min < 1)
+            {
+                min++;
+                max++;
+            }
+            var pageRange = Enumerable.Range(min, count);
+            foreach(var pageNumber in pageRange)
+            {
+                <a class="btn btn-primary" href="@Url.Action("Index", "Card", new{searchString = ViewBag.searchString, cardType = ViewBag.cardType, page = pageNumber})">
+                    @pageNumber
+                </a>
+            }
+        }
+        <a class="btn btn-primary" href="@Url.Action("Index", "Card", new{searchString = ViewBag.searchString, cardType = ViewBag.cardType, page = ViewBag.nextPage})">Next Page</a>
+    </div>
+    
+}

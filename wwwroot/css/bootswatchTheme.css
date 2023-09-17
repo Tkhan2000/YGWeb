@@ -460,9 +460,14 @@ button {
     border-radius: 0;
 }
 
-    button:focus:not(:focus-visible) {
-        outline: 0;
-    }
+button.link {
+    background: none;
+    border: none;
+}
+
+button:focus:not(:focus-visible) {
+    outline: 0;
+}
 
 input,
 button,

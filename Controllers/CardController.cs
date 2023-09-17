@@ -1,41 +1,51 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using YGWeb.Data;
 using YGWeb.Models;
-using PagedList;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace YGWeb.Controllers
 {
     public class CardController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private int _pageSize;
+        private int _lastPage;
 
         public CardController(ApplicationDbContext db)
         {
             _db = db;
         }
-        public IActionResult Index(string searchString, string cardType)
+        public IActionResult Index(string searchString, string cardType, int? page)
         {
+            /*
+             * Main Page for Card List. Keeps track of Search Keyword, page Number, and other filter keywords 
+             * and modifies database accordingly
+            */
             IEnumerable<Card> objCardList = _db.Cards;
+            int pageNumber = page ?? 1;
+            
             if (!String.IsNullOrEmpty(searchString))
             {
-                objCardList = objCardList.Where(card => card.name.Contains(searchString) || card.description.Contains(searchString));
+                objCardList = objCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
             }
             if (!String.IsNullOrEmpty(cardType))
             {
                 objCardList = objCardList.Where(card => card.type.Contains(cardType));
             }
-            return View(objCardList);
-        }
+            var chunks = objCardList.Chunk(50);
+            _lastPage = chunks.Count();
 
-        public IActionResult SelectCardType() 
-        {
-            List<SelectListItem> items = new List<SelectListItem>();
-            items.Add(new SelectListItem { Text = "Monster", Value = "1" });
-            items.Add(new SelectListItem { Text = "Spell", Value = "2" });
-            items.Add(new SelectListItem { Text = "Trap", Value = "3" });
-            ViewBag.CardType = items;
-            return View(); 
+            ViewBag.pageNumber = pageNumber;
+            ViewBag.searchString = searchString;
+            ViewBag.cardType = cardType;
+            ViewBag.lastPage = _lastPage;
+
+            if(_lastPage == 0)
+            {
+                return View();
+            }
+
+            var currentPage = chunks.ElementAt(pageNumber-1);
+            return View(currentPage);
         }
     }
 }
