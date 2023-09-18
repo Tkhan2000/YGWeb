@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Card>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="p-3 m-3">
+    <h1> Deck Builder </h1>
+</div>
+
+<div class="row">
+    <div class="column w-50 p-2" style="background-color:gray;">
+        @Html.TextBox("deckName", "Deck Name Here")
+        <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:2/3.25">
+            @for (int row = 0; row < 6; row++)
+            {
+                <tr>
+                @for(int col = 0; col < 10; col++)
+                {
+                        <td></td>
+                }
+                </tr>
+            }
+        </table>
+        
+    </div>
+    <div class="column w-50 p-2" style="background-color:darkcyan;">
+        <div class="row p-2">
+            <div class="col-6">
+                Find by name: @Html.TextBox("SearchString")
+            </div>
+            <div class="col-6 text-end">
+                <img src="https://ms.yugipedia.com//4/4a/Back-AE.png" style="width:70%" />
+            </div>
+        </div>
+        <div style="height:620px;overflow:auto;">
+            <table class="table table-bordered table-striped" style="width:100%;aspect-ratio:1/1">
+                @for (int row = 0; row < 5; row++)
+                {
+                    <tr>
+                        @for (int col = 0; col < 8; col++)
+                        {
+                            <td>
+                                <img src="https://images.ygoprodeck.com/images/cards/34541863.jpg" style="width:100%" />
+                            </td>
+                        }
+                    </tr>
+                }
+            </table>
+        </div>
+    </div>
+</div>

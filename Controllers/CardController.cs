@@ -47,5 +47,10 @@ namespace YGWeb.Controllers
             var currentPage = chunks.ElementAt(pageNumber-1);
             return View(currentPage);
         }
+
+        public IActionResult DeckBuilder()
+        {
+            return View();
+        }
     }
 }
