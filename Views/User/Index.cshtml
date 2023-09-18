@@ -1,0 +1,37 @@
+﻿@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+@if (ViewBag.currentUser != null)
+{
+    <h2 class="align-content-center ">
+        Welcome @ViewBag.currentUser.username!
+    </h2>
+}
+else
+{
+    <h1>User Login Information</h1>
+
+    <div class="border p-3 mt-4">
+        @using (Html.BeginForm("Index", "User", new { }))
+        {
+            <p>
+                Sign In:
+            </p>
+            <p>
+                Username: @Html.TextBox("name")
+            </p>
+            <p>
+                Password: @Html.TextBox("pass")
+            </p>
+            <input type="submit" value="Submit" />
+        }
+        <p>
+            New User?
+            Create a new account here <a asp-controller="User" asp-action="Create" class="btn btn-primary"> Create New User</a>
+        </p>
+    </div>
+}

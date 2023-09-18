@@ -1,0 +1,26 @@
+﻿@model User
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1> Sign up as new user</h1>
+
+<form method="post">
+    <div class="border p-3 mt-4">
+        <div class="row pb-2">
+            <h2 class="text-priimary"> Create User Account</h2>
+            <hr />
+        </div>
+        <div class="mb-3">
+            <label asp-for="username"> Username: </label>
+            <input asp-for="username" class="form-action" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="password"> Password: </label>
+            <input asp-for="password" class="form-action" />
+        </div>
+        <button type="submit" class="btn btn-primary">Create User</button>
+        <a asp-controller="User" asp-action="Index" class="btn btn-primary"> Back to Sign In</a>
+    </div>
+</form>
