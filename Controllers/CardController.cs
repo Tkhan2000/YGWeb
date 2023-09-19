@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using YGWeb.Data;
 using YGWeb.Models;
 
@@ -47,7 +48,7 @@ namespace YGWeb.Controllers
             var currentPage = chunks.ElementAt(pageNumber-1);
             return View(currentPage);
         }
-
+        [Authorize]
         public IActionResult DeckBuilder()
         {
             return View();

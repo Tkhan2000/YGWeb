@@ -10,7 +10,5 @@ namespace YGWeb.Data
         }
 
         public DbSet<Card> Cards { get; set; }
-
-        public DbSet<YGWeb.Models.User> Users { get; set; } = default!;
     }
 }
