@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using YGWeb.Data;
 using YGWeb.Models;
+using static YGWeb.Models.Card;
 
 namespace YGWeb.Controllers
 {
@@ -49,9 +50,30 @@ namespace YGWeb.Controllers
             return View(currentPage);
         }
         [Authorize]
-        public IActionResult DeckBuilder()
+        public IActionResult DeckBuilder(string searchString, int? page)
         {
-            return View();
+            IEnumerable<Card> objCardList = _db.Cards;
+            int pageNumber = page ?? 1;
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                objCardList = objCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
+            }
+            var chunks = objCardList.Chunk(80);
+            _lastPage = chunks.Count();
+
+            ViewBag.pageNumber = pageNumber;
+            ViewBag.searchString = searchString;
+            ViewBag.lastPage = _lastPage;
+
+            if (_lastPage == 0)
+            {
+                return View();
+            }
+
+            var currentPage = chunks.ElementAt(pageNumber - 1);
+
+            return View(currentPage);
         }
     }
 }

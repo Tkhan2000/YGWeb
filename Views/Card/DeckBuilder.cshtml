@@ -1,17 +1,31 @@
 ﻿@model IEnumerable<Card>
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "DeckBuilder";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    
+    ViewBag.nextPage = ViewBag.pageNumber;
+    ViewBag.previousPage = ViewBag.pageNumber;
+
+    if (ViewBag.lastPage > 5)
+        ViewBag.chunks = 5;
+    else
+        ViewBag.chunks = ViewBag.lastPage;
+
+    if (ViewBag.pageNumber < ViewBag.lastPage)
+        ViewBag.nextPage = ViewBag.pageNumber + 1;
+    if (ViewBag.pageNumber > 1)
+        ViewBag.previousPage = ViewBag.pageNumber - 1;
 }
 
 <div class="p-3 m-3">
     <h1> Deck Builder </h1>
 </div>
 
+
 <div class="row">
     <div class="column w-50 p-2" style="background-color:gray;">
         @Html.TextBox("deckName", "Deck Name Here")
-        <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:2/3.25">
+        <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:1/1;table-layout:fixed">
             @for (int row = 0; row < 6; row++)
             {
                 <tr>
@@ -24,29 +38,78 @@
         </table>
         
     </div>
-    <div class="column w-50 p-2" style="background-color:darkcyan;">
+    <div class="column w-50 p-0" style="background-color:darkcyan;">
         <div class="row p-2">
-            <div class="col-6">
-                Find by name: @Html.TextBox("SearchString")
+            <div class="col-6 ">
+                @using (Html.BeginForm("DeckBuilder", "Card", new { page = 1 }))
+                {
+                    <div class="col-6">
+                        <p style="color:white">Find by name: @Html.TextBox("SearchString")</p>
+                    </div>
+                    <p style="padding-top:5px">
+                        <input type="submit" value="Submit" />
+                    </p>
+                }
             </div>
+            
             <div class="col-6 text-end">
                 <img src="https://ms.yugipedia.com//4/4a/Back-AE.png" style="width:70%" />
             </div>
+            
         </div>
-        <div style="height:620px;overflow:auto;">
-            <table class="table table-bordered table-striped" style="width:100%;aspect-ratio:1/1">
-                @for (int row = 0; row < 5; row++)
+        <div class="p-0" style="height:620px;overflow:auto;">
+            <table class="table table-bordered table-striped p-0" style="width:100%;aspect-ratio:1/1;table-layout:fixed">
+                @if(Model != null)
                 {
-                    <tr>
-                        @for (int col = 0; col < 8; col++)
-                        {
-                            <td>
-                                <img src="https://images.ygoprodeck.com/images/cards/34541863.jpg" style="width:100%" />
-                            </td>
-                        }
-                    </tr>
+                    var chunks = Model.Chunk(8);
+                    @foreach (var chunk in chunks)
+                    {
+                        <tr>
+                            @foreach (var card in chunk)
+                            {
+                                <td>
+                                    <img src="@card.image_url" style="width:100%" />
+                                </td>
+                            }
+                        </tr>
+                    }
                 }
             </table>
+
+            @using (Html.BeginForm())
+            {
+                <div style="text-align:center">
+                    <a class="btn btn-primary" href="@Url.Action("DeckBuilder", "Card", new{searchString = ViewBag.searchString, page = ViewBag.previousPage})">Previous Page</a>
+                    @{
+                        int current = ViewBag.pageNumber;
+                        int last = ViewBag.lastPage;
+                        int min = current - 2;
+                        int max = current + 2;
+                        int count = ViewBag.chunks;
+                        while (min < 1)
+                        {
+                            min++;
+                            max++;
+                        }
+                        var pageRange = Enumerable.Range(min, count);
+                        foreach (var pageNumber in pageRange)
+                        {
+                            <a class="btn btn-primary" href="@Url.Action("DeckBuilder", "Card", new{searchString = ViewBag.searchString, page = pageNumber})">
+                                @if (pageNumber == current)
+                                {
+                                    <b style="font-size:17px">@pageNumber</b>
+                                }
+                                else
+                                {
+                                    @pageNumber
+                                }
+                            </a>
+                        }
+                    }
+                    <a class="btn btn-primary" href="@Url.Action("DeckBuilder", "Card", new{searchString = ViewBag.searchString, page = ViewBag.nextPage})">Next Page</a>
+                </div>
+
+            }
         </div>
     </div>
 </div>
