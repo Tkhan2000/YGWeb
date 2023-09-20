@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using YGWeb.Data;
 using YGWeb.Models;
 using static YGWeb.Models.Card;
@@ -23,6 +24,18 @@ namespace YGWeb.Controllers
              * and modifies database accordingly
             */
             IEnumerable<Card> objCardList = _db.Cards;
+            /*
+            IEnumerable<Card> cardList = _db.Cards.Take(40);
+            var deck = new Deck();
+            string cards = "";
+            foreach(Card objCard in objCardList)
+            {
+                cards += objCard.id.ToString() + "/";
+            }
+            deck.CardList = cards;
+            _db.Decks.Add(deck);
+            _db.SaveChanges();
+            */
             int pageNumber = page ?? 1;
             
             if (!String.IsNullOrEmpty(searchString))

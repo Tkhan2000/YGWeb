@@ -17,6 +17,13 @@
         ViewBag.previousPage = ViewBag.pageNumber - 1;
 }
 
+<style>
+    #highlightable td:hover{
+        background-color: gray;
+        color: white;
+    }
+</style>
+
 <div class="p-3 m-3">
     <h1> Deck Builder </h1>
 </div>
@@ -58,18 +65,22 @@
             
         </div>
         <div class="p-0" style="height:620px;overflow:auto;">
-            <table class="table table-bordered table-striped p-0" style="width:100%;aspect-ratio:1/1;table-layout:fixed">
+            <table class="table table-bordered table-striped p-0" style="width:100%;table-layout:fixed" id="highlightable">
                 @if(Model != null)
                 {
                     var chunks = Model.Chunk(8);
                     @foreach (var chunk in chunks)
                     {
-                        <tr>
+                        <tr class="p-0">
                             @foreach (var card in chunk)
                             {
                                 <td>
                                     <img src="@card.image_url" style="width:100%" />
                                 </td>
+                            }
+                            @for (int i = 0; i < (8 - chunk.Length); i++)
+                            {
+                                <td id=""></td>
                             }
                         </tr>
                     }

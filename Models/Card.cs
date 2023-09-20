@@ -48,6 +48,7 @@ namespace YGWeb.Models
             Water, 
             Wind
         }
+        [Key]
         [Required]
         public int id { get; set; }
         [Required]

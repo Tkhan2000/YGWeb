@@ -69,6 +69,10 @@
             "PagedList.Mvc": {
               "target": "Package",
               "version": "[4.5.0, )"
+            },
+            "jQuery.UI.Combined": {
+              "target": "Package",
+              "version": "[1.13.2, )"
             }
           },
           "imports": [
