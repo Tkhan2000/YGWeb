@@ -75,7 +75,7 @@
                             @foreach (var card in chunk)
                             {
                                 <td>
-                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", null, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
                                         <img src="@card.image_url" style="width:100%" />
                                 </a>
                                     

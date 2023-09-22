@@ -1,8 +1,31 @@
-﻿
+﻿@model YGWeb.Models.Card
 @{
     ViewData["Title"] = "CardDetails";
-    //Layout = "~/Views/Shared/_Layout.cshtml";
     Layout = null;
+    bool isMonster = false;
+    string imageURL;
+    string name;
+    string description;
+    string cardType;
+    if (Model.type.Contains("Monster"))
+    {
+        isMonster = true;
+    }
+
+    if (Model == null)
+    {
+        imageURL = "https://ms.yugipedia.com//4/4a/Back-AE.png";
+        name = "Name Not Found";
+        description = "Seems like there was an error retrieving card information";
+        cardType = "";
+    }
+    else
+    {
+        imageURL = Model.image_url;
+        name = Model.name;
+        description = Model.description;
+        cardType = Model.type;
+    }
 }
 
 <!DOCTYPE html>
@@ -21,15 +44,25 @@
 
         .card-text {
             margin-left: 20px; /* Add some space between the image and text */
+            
         }
     </style>
 </head>
-<body>
+<body class="card-container">
     <div class="card-container">
-        <img src="https://ms.yugipedia.com//4/4a/Back-AE.png" alt="Card Image" class="card-image">
-        <div class="card-text" style="t">
-            <h2>Card Title</h2>
-            <p>This is some text that goes alongside the card image.</p>
+        <img src=@imageURL alt="Card Image" class="card-image">
+        <div class="card-text">
+            <h2>@name</h2>
+            <b>@cardType   |   @Model.race</b>
+            @if (isMonster)
+            {
+                <br/>
+                <b>Atk: @Model.atk   Def: @Model.def</b>
+                <br />
+                <b class="pb-0">Level: @Model.level</b>
+            }
+            <hr/>
+            <p>@description</p>
         </div>
     </div>
 </body>

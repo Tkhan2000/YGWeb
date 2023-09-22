@@ -89,9 +89,14 @@ namespace YGWeb.Controllers
             return View(currentPage);
         }
 
-        public IActionResult CardDetails()
+        public IActionResult CardDetails(int id = 0)
         {
-            return View();
+            if (id == 0)
+            {
+                return View(null);
+            }
+            Card card = _db.Cards.FirstOrDefault(card => card.id == id);
+            return View(card);
         }
     }
 }
