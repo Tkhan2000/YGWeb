@@ -37,7 +37,7 @@ namespace YGWeb.Controllers
             _db.SaveChanges();
             */
             int pageNumber = page ?? 1;
-            
+
             if (!String.IsNullOrEmpty(searchString))
             {
                 objCardList = objCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
@@ -54,12 +54,12 @@ namespace YGWeb.Controllers
             ViewBag.cardType = cardType;
             ViewBag.lastPage = _lastPage;
 
-            if(_lastPage == 0)
+            if (_lastPage == 0)
             {
                 return View();
             }
 
-            var currentPage = chunks.ElementAt(pageNumber-1);
+            var currentPage = chunks.ElementAt(pageNumber - 1);
             return View(currentPage);
         }
         [Authorize]
@@ -87,6 +87,11 @@ namespace YGWeb.Controllers
             var currentPage = chunks.ElementAt(pageNumber - 1);
 
             return View(currentPage);
+        }
+
+        public IActionResult CardDetails()
+        {
+            return View();
         }
     }
 }

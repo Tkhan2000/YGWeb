@@ -75,12 +75,15 @@
                             @foreach (var card in chunk)
                             {
                                 <td>
-                                    <img src="@card.image_url" style="width:100%" />
+                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", null, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                        <img src="@card.image_url" style="width:100%" />
+                                </a>
+                                    
                                 </td>
                             }
                             @for (int i = 0; i < (8 - chunk.Length); i++)
                             {
-                                <td id=""></td>
+                                <td style="background-color:rgb(20,20,20)"></td>
                             }
                         </tr>
                     }

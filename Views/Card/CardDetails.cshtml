@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewData["Title"] = "CardDetails";
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .card-container {
+            display: flex; /* Use flexbox to align items horizontally */
+            align-items: flex-start; /* Center items vertically */
+        }
+
+        .card-image {
+            max-width: 300px; /* Set the maximum width for the image */
+            height: auto; /* Allow the image to maintain its aspect ratio */
+        }
+
+        .card-text {
+            margin-left: 20px; /* Add some space between the image and text */
+        }
+    </style>
+</head>
+<body>
+    <div class="card-container">
+        <img src="https://ms.yugipedia.com//4/4a/Back-AE.png" alt="Card Image" class="card-image">
+        <div class="card-text" style="t">
+            <h2>Card Title</h2>
+            <p>This is some text that goes alongside the card image.</p>
+        </div>
+    </div>
+</body>
+</html>
