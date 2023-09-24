@@ -69,8 +69,9 @@
     {
         <hr />
         <div class="row">
-            <div class="col-6">
-                <a class="btn btn-success"> Add to Deck</a>
+            <div class="col-6 justify-content-evenly">
+                <a onclick="addToDeck('@Url.Action("addCard", "Card")', @Model.id)" class="btn btn-success"> Add to Deck</a>
+                <input style="background-color: gray" type="number" min="0" max="3" step="1" value="1"/>
             </div>
             <div class="col-6 text-end">
                 <b> Currently in Deck: </b>

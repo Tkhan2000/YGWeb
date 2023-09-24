@@ -13,4 +13,14 @@ showInPopup = (url, title) => {
             $('#form-modal').modal('show');
         }
     })
-}
+};
+
+addToDeck = (url, cardId) => {
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: { id: cardId },
+        success: function (res) {
+        }
+    })
+};

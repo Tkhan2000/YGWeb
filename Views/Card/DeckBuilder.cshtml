@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "DeckBuilder";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    
+
     ViewBag.nextPage = ViewBag.pageNumber;
     ViewBag.previousPage = ViewBag.pageNumber;
 
@@ -15,6 +15,12 @@
         ViewBag.nextPage = ViewBag.pageNumber + 1;
     if (ViewBag.pageNumber > 1)
         ViewBag.previousPage = ViewBag.pageNumber - 1;
+
+    string cardList = "";
+    if (TempData["currentCardList"] != null)
+    {
+        cardList = TempData["currentCardList"].ToString();
+    }
 }
 
 <style>
@@ -26,6 +32,7 @@
 
 <div class="p-3 m-3">
     <h1> Deck Builder </h1>
+    <p> Current Card List: @cardList</p>
 </div>
 
 

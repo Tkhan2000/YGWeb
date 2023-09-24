@@ -10,8 +10,8 @@ namespace YGWeb.Controllers
     public class CardController : Controller
     {
         private readonly ApplicationDbContext _db;
-        private int _pageSize;
         private int _lastPage;
+        private string _currentCardList = "";
 
         public CardController(ApplicationDbContext db)
         {
@@ -87,6 +87,14 @@ namespace YGWeb.Controllers
             var currentPage = chunks.ElementAt(pageNumber - 1);
 
             return View(currentPage);
+        }
+
+        [HttpPost]
+        public JsonResult addCard(int id)
+        {
+            _currentCardList += id.ToString() + "|";
+            TempData["currentCardList"] = _currentCardList;
+            return new JsonResult(_currentCardList);
         }
 
         public IActionResult CardDetails(int id, bool cardList)
