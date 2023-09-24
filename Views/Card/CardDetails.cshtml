@@ -38,7 +38,7 @@
         }
 
         .card-image {
-            max-width: 300px; /* Set the maximum width for the image */
+            max-width: 500px; /* Set the maximum width for the image */
             height: auto; /* Allow the image to maintain its aspect ratio */
         }
 
@@ -65,5 +65,17 @@
             <p>@description</p>
         </div>
     </div>
+    @if (!ViewBag.cardList)
+    {
+        <hr />
+        <div class="row">
+            <div class="col-6">
+                <a class="btn btn-success"> Add to Deck</a>
+            </div>
+            <div class="col-6 text-end">
+                <b> Currently in Deck: </b>
+            </div>
+        </div>
+    }
 </body>
 </html>

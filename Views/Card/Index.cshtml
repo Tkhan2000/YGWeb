@@ -70,7 +70,7 @@
             {
                 <tr>
                     <td width="20%">
-                        <a href="@obj.image_url" target="_blank">
+                        <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = obj.id, cardList = true}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
                         <img src="@obj.image_url" height="200">
                         </a>
                     </td>
