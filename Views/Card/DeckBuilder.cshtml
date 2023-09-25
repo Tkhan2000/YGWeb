@@ -16,10 +16,16 @@
     if (ViewBag.pageNumber > 1)
         ViewBag.previousPage = ViewBag.pageNumber - 1;
 
-    string cardList = "";
-    if (TempData["currentCardList"] != null)
+    IEnumerable<Card> fullCardList = Model;
+    IEnumerable<Card> tempCardList = Model.GroupBy(x => x)
+              .Where(g => g.Count() > 1)
+              .Select(y => y.Key);
+    IEnumerable<Card> baseCardList = Model.Distinct().OrderBy(card => card.name);
+
+    Card[] deckList = new Card[60];
+    for (int i = 0; i < tempCardList.Count(); i++)
     {
-        cardList = TempData["currentCardList"].ToString();
+        deckList[i] = tempCardList.ElementAt(i);
     }
 }
 
@@ -32,7 +38,6 @@
 
 <div class="p-3 m-3">
     <h1> Deck Builder </h1>
-    <p> Current Card List: @cardList</p>
 </div>
 
 
@@ -51,16 +56,12 @@
                 }
             </div>
 
-            <div class="col-6 text-end">
-                <img src="https://ms.yugipedia.com//4/4a/Back-AE.png" style="width:70%" />
-            </div>
-
         </div>
         <div class="p-0" style="height:620px;overflow:auto;">
             <table class="table table-bordered table-striped p-0" style="width:100%;table-layout:fixed" id="highlightable">
-                @if (Model != null)
+                @if (baseCardList != null)
                 {
-                    var chunks = Model.Chunk(8);
+                    var chunks = baseCardList.Chunk(8);
                     @foreach (var chunk in chunks)
                     {
                         <tr class="p-0">
@@ -121,13 +122,26 @@
 
     <div class="column w-50 p-2" style="background-color:gray;">
         @Html.TextBox("deckName", "Deck Name Here")
-        <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:1/1;table-layout:fixed">
-            @for (int row = 0; row < 6; row++)
+        <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:1/1.25;table-layout:fixed">
+            @for (int row = 0; row < 10; row++)
             {
-                <tr>
-                @for(int col = 0; col < 10; col++)
+                <tr class="p-0" style="height:100px">
+                @for(int col = 0; col < 6; col++)
                 {
-                        <td></td>
+                        int index = row * 6 + col;
+                        @if (deckList[index] != null)
+                        {
+                            Card card = deckList[index];
+                            <td>
+                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = true}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                    <img src="@card.image_url" style="width:100%" />
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
                 }
                 </tr>
             }

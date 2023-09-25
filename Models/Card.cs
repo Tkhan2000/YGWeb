@@ -72,4 +72,5 @@ namespace YGWeb.Models
         public string image_url { get; set; }
 
     }
+
 }

@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.Frameworks;
+using System.Dynamic;
 using YGWeb.Data;
 using YGWeb.Models;
 using static YGWeb.Models.Card;
@@ -13,6 +15,12 @@ namespace YGWeb.Controllers
         private int _lastPage;
         private string _currentCardList = "";
 
+        public class FullViewModel
+        {
+            public IEnumerable<Card> BaseCards { get; set; }
+            public IEnumerable<Card> TempCards { get; set; }
+        }
+
         public CardController(ApplicationDbContext db)
         {
             _db = db;
@@ -23,7 +31,7 @@ namespace YGWeb.Controllers
              * Main Page for Card List. Keeps track of Search Keyword, page Number, and other filter keywords 
              * and modifies database accordingly
             */
-            IEnumerable<Card> objCardList = _db.Cards;
+            IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
             /*
             IEnumerable<Card> cardList = _db.Cards.Take(40);
             var deck = new Deck();
@@ -40,13 +48,13 @@ namespace YGWeb.Controllers
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                objCardList = objCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
+                baseCardList = baseCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
             }
             if (!String.IsNullOrEmpty(cardType))
             {
-                objCardList = objCardList.Where(card => card.type.Contains(cardType));
+                baseCardList = baseCardList.Where(card => card.type.Contains(cardType));
             }
-            var chunks = objCardList.Chunk(50);
+            var chunks = baseCardList.Chunk(50);
             _lastPage = chunks.Count();
 
             ViewBag.pageNumber = pageNumber;
@@ -60,12 +68,18 @@ namespace YGWeb.Controllers
             }
 
             var currentPage = chunks.ElementAt(pageNumber - 1);
+
+            
             return View(currentPage);
         }
         [Authorize]
         public IActionResult DeckBuilder(string searchString, int? page)
         {
             IEnumerable<Card> objCardList = _db.Cards;
+            IEnumerable<Card> tempCardList = _db.Cards.GroupBy(x => x)
+              .Where(g => g.Count() > 1)
+              .Select(y => y.Key);
+            IEnumerable<Card> baseCardList = _db.Cards.Distinct();
             int pageNumber = page ?? 1;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -92,9 +106,11 @@ namespace YGWeb.Controllers
         [HttpPost]
         public JsonResult addCard(int id)
         {
-            _currentCardList += id.ToString() + "|";
-            TempData["currentCardList"] = _currentCardList;
-            return new JsonResult(_currentCardList);
+            Card card = _db.Cards.FirstOrDefault(card => card.id == id);
+            _db.Cards.Add(card);
+            _db.SaveChanges();
+            
+            return new JsonResult("");
         }
 
         public IActionResult CardDetails(int id, bool cardList)
