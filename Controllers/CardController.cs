@@ -1,8 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json.Linq;
 using NuGet.Frameworks;
+using System.Collections.Generic;
 using System.Dynamic;
+using System.Linq;
 using YGWeb.Data;
 using YGWeb.Models;
 using static YGWeb.Models.Card;
@@ -70,10 +73,15 @@ namespace YGWeb.Controllers
         public IActionResult DeckBuilder(string searchString, int? page)
         {
             IEnumerable<Card> objCardList = _db.Cards;
-            IEnumerable<Card> tempCardList = _db.Cards.GroupBy(x => x)
-              .Where(g => g.Count() > 1)
-              .Select(y => y.Key);
             IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
+            int diff = objCardList.Count() - baseCardList.Count();
+
+            List<Card> cardList = _db.Cards.ToList();
+            foreach(Card card in baseCardList)
+            {
+                cardList.Remove(card);
+            }
+            IEnumerable<Card>  tempCardList = cardList;
             int pageNumber = page ?? 1;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -110,10 +118,15 @@ namespace YGWeb.Controllers
         public IActionResult removeCard(int id, string s, int p)
         {
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
+            int count = _db.Cards.Count(card => card.id == id) - 1;
             _db.Cards.Remove(card);
             _db.SaveChanges();
-            _db.Cards.Add(card);
-            _db.SaveChanges();
+            for (int i = 0; i < count; i++)
+            {
+                // Add back any extra cards that were removed
+                _db.Cards.Add(card);
+                _db.SaveChanges();
+            }
             return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
 

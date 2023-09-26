@@ -65,8 +65,9 @@
                         <tr class="p-0">
                             @foreach (var card in chunk)
                             {
+                                int cardCount = tempCardList.Count(c => c.id == card.id);
                                 <td>
-                                    <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = "Add", searchString = ViewBag.searchString, page = ViewBag.previousPage}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                    <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = "Add", searchString = ViewBag.searchString, page = ViewBag.previousPage, count = cardCount}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
                                         <img src="@card.image_url" style="width:100%" />
                                     </a>
 
