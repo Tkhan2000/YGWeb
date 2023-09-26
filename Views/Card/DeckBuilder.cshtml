@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Card>
+﻿@model Tuple<YGWeb.Models.Card[], IEnumerable<Card>>
 @{
     ViewData["Title"] = "DeckBuilder";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -16,12 +16,10 @@
     if (ViewBag.pageNumber > 1)
         ViewBag.previousPage = ViewBag.pageNumber - 1;
 
-    IEnumerable<Card> fullCardList = Model;
-    IEnumerable<Card> tempCardList = Model.GroupBy(x => x)
-              .Where(g => g.Count() > 1)
-              .Select(y => y.Key);
-    IEnumerable<Card> baseCardList = Model.Distinct().OrderBy(card => card.name);
 
+    IEnumerable<Card> tempCardList = Model.Item2;
+    IEnumerable<Card> baseCardList = Model.Item1;
+    
     Card[] deckList = new Card[60];
     for (int i = 0; i < tempCardList.Count(); i++)
     {
@@ -68,7 +66,7 @@
                             @foreach (var card in chunk)
                             {
                                 <td>
-                                    <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = false}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                    <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = "Add", searchString = ViewBag.searchString, page = ViewBag.previousPage}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
                                         <img src="@card.image_url" style="width:100%" />
                                     </a>
 
@@ -132,8 +130,9 @@
                         @if (deckList[index] != null)
                         {
                             Card card = deckList[index];
+                            int cardCount = tempCardList.Count(c => c.id == card.id);
                             <td>
-                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = true}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = "Remove", searchString = ViewBag.searchString, page = ViewBag.pageNumber, count = cardCount}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
                                     <img src="@card.image_url" style="width:100%" />
                                 </a>
                             </td>

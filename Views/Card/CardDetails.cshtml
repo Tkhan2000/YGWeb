@@ -65,16 +65,29 @@
             <p>@description</p>
         </div>
     </div>
-    @if (!ViewBag.cardList)
+    @if (ViewBag.cardList == "Add")
     {
         <hr />
         <div class="row">
             <div class="col-6 justify-content-evenly">
-                <a onclick="addToDeck('@Url.Action("addCard", "Card")', @Model.id)" class="btn btn-success"> Add to Deck</a>
+                <a asp-action="addCard" asp-route-id="@Model.id" asp-route-s="@ViewBag.searchString" asp-route-p="@ViewBag.pageNumber" class="btn btn-success">Add to Deck</a>
                 <input style="background-color: gray" type="number" min="0" max="3" step="1" value="1"/>
             </div>
             <div class="col-6 text-end">
-                <b> Currently in Deck: </b>
+                <b> Currently in Deck: @ViewBag.count</b>
+            </div>
+        </div>
+    }
+    @if (ViewBag.cardList == "Remove")
+    {
+        <hr />
+        <div class="row" style="display:flex">
+            <div class="col-6 justify-content-evenly">
+                <a asp-action="removeCard" asp-route-id="@Model.id" asp-route-s="@ViewBag.searchString" asp-route-p="@ViewBag.pageNumber" class="btn btn-danger">Remove from Deck</a>
+                <input style="background-color: gray" type="number" min="0" max="3" step="1" value="1" />
+            </div>
+            <div class="col-6 text-end">
+                <b> Currently in Deck: @ViewBag.count</b>
             </div>
         </div>
     }

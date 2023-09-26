@@ -15,12 +15,6 @@ namespace YGWeb.Controllers
         private int _lastPage;
         private string _currentCardList = "";
 
-        public class FullViewModel
-        {
-            public IEnumerable<Card> BaseCards { get; set; }
-            public IEnumerable<Card> TempCards { get; set; }
-        }
-
         public CardController(ApplicationDbContext db)
         {
             _db = db;
@@ -79,14 +73,16 @@ namespace YGWeb.Controllers
             IEnumerable<Card> tempCardList = _db.Cards.GroupBy(x => x)
               .Where(g => g.Count() > 1)
               .Select(y => y.Key);
-            IEnumerable<Card> baseCardList = _db.Cards.Distinct();
+            IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
             int pageNumber = page ?? 1;
 
             if (!String.IsNullOrEmpty(searchString))
             {
-                objCardList = objCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
+                baseCardList = baseCardList.Where(card => card.name.ToLower().Contains(searchString.ToLower()) || card.description.ToLower().Contains(searchString.ToLower()));
             }
-            var chunks = objCardList.Chunk(80);
+
+            
+            var chunks = baseCardList.Chunk(80);
             _lastPage = chunks.Count();
 
             ViewBag.pageNumber = pageNumber;
@@ -100,7 +96,25 @@ namespace YGWeb.Controllers
 
             var currentPage = chunks.ElementAt(pageNumber - 1);
 
-            return View(currentPage);
+            return View(Tuple.Create(currentPage, tempCardList));
+        }
+
+        public IActionResult addCard(int id, string s, int p)
+        {
+            Card card = _db.Cards.FirstOrDefault(card => card.id == id);
+            _db.Cards.Add(card);
+            _db.SaveChanges();
+            return RedirectToAction("DeckBuilder", new {searchString = s, page = p});
+        }
+
+        public IActionResult removeCard(int id, string s, int p)
+        {
+            Card card = _db.Cards.FirstOrDefault(card => card.id == id);
+            _db.Cards.Remove(card);
+            _db.SaveChanges();
+            _db.Cards.Add(card);
+            _db.SaveChanges();
+            return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
 
         [HttpPost]
@@ -109,13 +123,16 @@ namespace YGWeb.Controllers
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
             _db.Cards.Add(card);
             _db.SaveChanges();
-            
             return new JsonResult("");
         }
 
-        public IActionResult CardDetails(int id, bool cardList)
+        public IActionResult CardDetails(int id, string cardList, string searchString, int? page, int count)
         {
+            int pageNumber = page ?? 1;
             ViewBag.cardList = cardList;
+            ViewBag.pageNumber = pageNumber;
+            ViewBag.searchString = searchString;
+            ViewBag.count = count;
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
             return View(card);
         }
