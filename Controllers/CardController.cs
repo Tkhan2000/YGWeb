@@ -107,18 +107,23 @@ namespace YGWeb.Controllers
             return View(Tuple.Create(currentPage, tempCardList));
         }
 
-        public IActionResult addCard(int id, string s, int p)
+        public IActionResult addCard(int id, string s, int p, int c)
         {
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
-            _db.Cards.Add(card);
-            _db.SaveChanges();
+
+            for (int i = 0; i < c; i++)
+            {
+                // Add back any extra cards that were removed
+                _db.Cards.Add(card);
+                _db.SaveChanges();
+            }
             return RedirectToAction("DeckBuilder", new {searchString = s, page = p});
         }
 
-        public IActionResult removeCard(int id, string s, int p)
+        public IActionResult removeCard(int id, string s, int p, int c)
         {
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
-            int count = _db.Cards.Count(card => card.id == id) - 1;
+            int count = _db.Cards.Count(card => card.id == id) - c;
             _db.Cards.Remove(card);
             _db.SaveChanges();
             for (int i = 0; i < count; i++)
@@ -129,7 +134,7 @@ namespace YGWeb.Controllers
             }
             return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
-
+        /*
         [HttpPost]
         public JsonResult addCard(int id)
         {
@@ -137,7 +142,7 @@ namespace YGWeb.Controllers
             _db.Cards.Add(card);
             _db.SaveChanges();
             return new JsonResult("");
-        }
+        }*/
 
         public IActionResult CardDetails(int id, string cardList, string searchString, int? page, int count)
         {

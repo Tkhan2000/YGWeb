@@ -26,6 +26,7 @@
         description = Model.description;
         cardType = Model.type;
     }
+    int addable = 3 - ViewBag.count;
 }
 
 <!DOCTYPE html>
@@ -47,6 +48,10 @@
             
         }
     </style>
+    <script>
+        const input = document.querySelector("numeric");
+        input.addEventListener("numeric", updateValue);
+    </script>
 </head>
 <body class="card-container">
     <div class="card-container">
@@ -70,8 +75,19 @@
         <hr />
         <div class="row">
             <div class="col-6 justify-content-evenly">
-                <a asp-action="addCard" asp-route-id="@Model.id" asp-route-s="@ViewBag.searchString" asp-route-p="@ViewBag.pageNumber" class="btn btn-success">Add to Deck</a>
-                <input style="background-color: gray" type="number" min="1" max="3" step="1" value="1"/>
+                @using (Html.BeginForm("addCard", "Card", new {id = Model.id, s = ViewBag.searchString, p = ViewBag.pageNumber }))
+                {
+                    @if (addable == 0)
+                    {
+                        <b style="color:rgb(200,10,10)">Max card limit reached</b>
+                    }
+                    else
+                    {
+                        <button class="btn btn-success" type="submit">Add to Deck</button>
+                        <input name="c" id="numeric" style="background-color: rgb(200,200,200);text-align:center" type="number" min="1" max="@addable" step="1" value="@(addable > 0 ? 1 : addable)" />
+                    }
+                    
+                }
             </div>
             <div class="col-6 text-end">
                 <b> Currently in Deck: @ViewBag.count</b>
@@ -83,8 +99,12 @@
         <hr />
         <div class="row" style="display:flex">
             <div class="col-6 justify-content-evenly">
-                <a asp-action="removeCard" asp-route-id="@Model.id" asp-route-s="@ViewBag.searchString" asp-route-p="@ViewBag.pageNumber" class="btn btn-danger">Remove from Deck</a>
-                <input style="background-color: gray" type="number" min="1" max="@ViewBag.count" step="1" value="1" />
+                @using (Html.BeginForm("removeCard", "Card", new { id = Model.id, s = ViewBag.searchString, p = ViewBag.pageNumber }))
+                {
+                    <button class="btn btn-danger" type="submit">Remove from Deck</button>
+                    <input name="c" id="numeric" style="background-color: rgb(200,200,200);text-align:center" type="number" min="1" max="@ViewBag.count" step="1" value="1" />
+
+                }
             </div>
             <div class="col-6 text-end">
                 <b> Currently in Deck: @ViewBag.count</b>
