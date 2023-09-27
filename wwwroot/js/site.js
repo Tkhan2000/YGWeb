@@ -24,3 +24,13 @@ addToDeck = (url, cardId) => {
         }
     })
 };
+
+saveDeck = (url) => {
+    $.ajax({
+        type: 'POST',
+        url: url,
+        success: function (res) {
+            alert("Deck Saved Successfully");
+        }
+    })
+};

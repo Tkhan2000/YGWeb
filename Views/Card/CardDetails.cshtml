@@ -3,6 +3,7 @@
     ViewData["Title"] = "CardDetails";
     Layout = null;
     bool isMonster = false;
+    bool isLink = false;
     string imageURL;
     string name;
     string description;
@@ -10,21 +11,10 @@
     if (Model.type.Contains("Monster"))
     {
         isMonster = true;
-    }
-
-    if (Model == null)
-    {
-        imageURL = "https://ms.yugipedia.com//4/4a/Back-AE.png";
-        name = "Name Not Found";
-        description = "Seems like there was an error retrieving card information";
-        cardType = "";
-    }
-    else
-    {
-        imageURL = Model.image_url;
-        name = Model.name;
-        description = Model.description;
-        cardType = Model.type;
+        if (Model.type.Contains("Link"))
+        {
+            isLink = true;
+        }
     }
     int addable = 3 - ViewBag.count;
 }
@@ -55,19 +45,27 @@
 </head>
 <body class="card-container">
     <div class="card-container">
-        <img src=@imageURL alt="Card Image" class="card-image">
+        <img src=@Model.image_url alt="Card Image" class="card-image">
         <div class="card-text">
-            <h2>@name</h2>
-            <b>@cardType   |   @Model.race</b>
+            <h2>@Model.name</h2>
+            <b>@Model.type   |   @Model.race</b>
             @if (isMonster)
             {
-                <br/>
-                <b>Atk: @Model.atk   Def: @Model.def</b>
-                <br />
-                <b class="pb-0">Level: @Model.level</b>
+                if (isLink)
+                {
+                    <br />
+                    <b>Atk: @Model.atk</b>
+                }
+                else
+                {
+                    <br />
+                    <b>Atk: @Model.atk   Def: @Model.def</b>
+                    <br />
+                    <b class="pb-0">Level: @Model.level</b>
+                }
             }
             <hr/>
-            <p>@description</p>
+            <p>@Model.description</p>
         </div>
     </div>
     @if (ViewBag.cardList == "Add")

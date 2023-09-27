@@ -74,14 +74,13 @@ namespace YGWeb.Controllers
         {
             IEnumerable<Card> objCardList = _db.Cards;
             IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
-            int diff = objCardList.Count() - baseCardList.Count();
 
             List<Card> cardList = _db.Cards.ToList();
             foreach(Card card in baseCardList)
             {
                 cardList.Remove(card);
             }
-            IEnumerable<Card>  tempCardList = cardList;
+            IEnumerable<Card>  tempCardList = cardList.OrderBy(card => card.name);
             int pageNumber = page ?? 1;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -134,15 +133,55 @@ namespace YGWeb.Controllers
             }
             return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
-        /*
-        [HttpPost]
-        public JsonResult addCard(int id)
+
+        public IActionResult clearDeck(string s, int p)
         {
-            Card card = _db.Cards.FirstOrDefault(card => card.id == id);
-            _db.Cards.Add(card);
-            _db.SaveChanges();
-            return new JsonResult("");
-        }*/
+            IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
+
+            List<Card> cardList = _db.Cards.ToList();
+            foreach (Card card in baseCardList)
+            {
+                cardList.Remove(card);
+            }
+            IEnumerable<Card> tempCardList = cardList.OrderBy(card => card.name);
+
+            foreach(Card obj in tempCardList)
+            {
+                _db.Cards.Remove(obj);
+                _db.SaveChanges();
+                _db.Cards.Add(obj);
+                _db.SaveChanges();
+            }
+            return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
+        }
+
+        [HttpPost]
+        public JsonResult saveDeck()
+        {
+            IEnumerable<Card> tempCardList = getDeckList();
+            bool isValid = validateDeck(tempCardList);
+            JsonResult result;
+            if (isValid)
+            {
+                var deck = new Deck();
+                string cards = "";
+                foreach (Card objCard in tempCardList)
+                {
+                    cards += objCard.id.ToString() + "/";
+                }
+                deck.CardList = cards;
+                _db.Decks.Add(deck);
+                _db.SaveChanges();
+                result = new JsonResult("Success");
+            }
+            else
+            {
+                result = new JsonResult("Failure");
+            }
+
+            return result;
+
+        } 
 
         public IActionResult CardDetails(int id, string cardList, string searchString, int? page, int count)
         {
@@ -153,6 +192,49 @@ namespace YGWeb.Controllers
             ViewBag.count = count;
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
             return View(card);
+        }
+
+        public IEnumerable<Card> getDeckList() 
+        {
+            IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
+
+            List<Card> cardList = _db.Cards.ToList();
+            foreach (Card card in baseCardList)
+            {
+                cardList.Remove(card);
+            }
+            return cardList.OrderBy(card => card.name);
+        }
+
+        //Performs full validation of deck and returns boolean
+        public bool validateDeck(IEnumerable<Card> deck)
+        {
+            // Use List of keywords to split the deck into main deck and extra
+            List<string> extraDeckMonster = new List<string>(new string[] { "Fusion", "Synchro", "XYZ", "Link" });
+            IEnumerable<Card> mainDeck = deck.Where(card => extraDeckMonster.Any(keyword => !card.type.Contains(keyword)));
+            IEnumerable<Card> extraDeck = deck.Where(card => extraDeckMonster.Any(keyword => card.type.Contains(keyword)));
+
+            // Validate length of each deck
+            int maxMain = 60;
+            int minMain = 40;
+            int maxExtra = 20;
+            if (mainDeck.Count() < minMain || mainDeck.Count() > maxMain || extraDeck.Count() > maxExtra)
+            {
+                return false;
+            }
+
+            // Validate that there are no cards that appear in excess in the full deck
+            var cards = deck.GroupBy(x => x);
+            foreach (var card in cards)
+            {
+                int max = 3; //Change later to reflect limited cards
+                if (card.Count() > max)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
     }
 }

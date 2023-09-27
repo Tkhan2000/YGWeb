@@ -19,12 +19,16 @@
 
     IEnumerable<Card> tempCardList = Model.Item2;
     IEnumerable<Card> baseCardList = Model.Item1;
-    
+
+    //Seperate tempCardList by normal deck and extra deck
+    List<string> extraDeckMonster = new List<string>(new string[] { "Fusion", "Synchro", "XYZ", "Link" });
+
     Card[] deckList = new Card[60];
     for (int i = 0; i < tempCardList.Count(); i++)
     {
         deckList[i] = tempCardList.ElementAt(i);
     }
+    
 }
 
 <style>
@@ -39,8 +43,8 @@
 </div>
 
 
-<div class="row">
-    <div class="column w-50 p-0" style="background-color:darkcyan;">
+<div class="row" style="outline:0.01em solid black;">
+    <div class="column w-50 p-0 " style="background-color:rgba(60,60,60,50);outline:0.01em solid black;">
         <div class="row p-2">
             <div class="col-6 ">
                 @using (Html.BeginForm("DeckBuilder", "Card", new { page = 1 }))
@@ -55,7 +59,7 @@
             </div>
 
         </div>
-        <div class="p-0" style="height:620px;overflow:auto;">
+        <div class="p-0" style="height:auto;overflow:auto;">
             <table class="table table-bordered table-striped p-0" style="width:100%;table-layout:fixed" id="highlightable">
                 @if (baseCardList != null)
                 {
@@ -100,16 +104,16 @@
                         var pageRange = Enumerable.Range(min, count);
                         foreach (var pageNumber in pageRange)
                         {
-                            <a class="btn btn-primary" href="@Url.Action("DeckBuilder", "Card", new{searchString = ViewBag.searchString, page = pageNumber})">
-                                @if (pageNumber == current)
+                                <a class="btn btn-primary" href="@Url.Action("DeckBuilder", "Card", new{searchString = ViewBag.searchString, page = pageNumber})">
+                                    @if (pageNumber == current)
                                 {
-                                    <b style="font-size:17px">@pageNumber</b>
+                                        <b style="font-size:17px">@pageNumber</b>
                                 }
                                 else
                                 {
-                                    @pageNumber
+                                        @pageNumber
                                 }
-                            </a>
+                                </a>
                         }
                     }
                     <a class="btn btn-primary" href="@Url.Action("DeckBuilder", "Card", new{searchString = ViewBag.searchString, page = ViewBag.nextPage})">Next Page</a>
@@ -119,7 +123,7 @@
         </div>
     </div>
 
-    <div class="column w-50 p-2" style="background-color:gray;">
+    <div class="column w-50 p-2" style="background-color:rgba(60,60,60,50);outline:0.01em solid black;">
         @Html.TextBox("deckName", "Deck Name Here")
         <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:1/1.25;table-layout:fixed">
             @for (int row = 0; row < 10; row++)
@@ -146,6 +150,15 @@
                 </tr>
             }
         </table>
+        <div class="row">
+            <div class="col-6">
+                <a class="btn btn-warning" asp-action="clearDeck" asp-route-s="@ViewBag.searchString" asp-route-p="@ViewBag.pageNumber"> Clear Deck</a>
+            </div>
+            <div class="col-6 text-end">
+                <a class="btn btn-success" onclick="saveDeck('@Url.Action("saveDeck", "Card")')"> Save Deck</a>
+            </div>
+        </div>
+        
         
     </div>
     
