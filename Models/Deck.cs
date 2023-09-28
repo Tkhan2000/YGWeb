@@ -11,5 +11,7 @@ namespace YGWeb.Models
 
         [Required]
         public string CardList { get; set; }
+        [Required]
+        public string YGWebUserId { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json.Linq;
@@ -6,6 +7,8 @@ using NuGet.Frameworks;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Security.Claims;
+using YGWeb.Areas.Identity.Data;
 using YGWeb.Data;
 using YGWeb.Models;
 using static YGWeb.Models.Card;
@@ -15,12 +18,14 @@ namespace YGWeb.Controllers
     public class CardController : Controller
     {
         private readonly ApplicationDbContext _db;
+        private readonly UserManager<YGWebUser> _userManager;
         private int _lastPage;
         private string _currentCardList = "";
-
-        public CardController(ApplicationDbContext db)
+        
+        public CardController(ApplicationDbContext db, UserManager<YGWebUser> userManager)
         {
             _db = db;
+            _userManager = userManager;
         }
         public IActionResult Index(string searchString, string cardType, int? page)
         {
@@ -161,6 +166,13 @@ namespace YGWeb.Controllers
             IEnumerable<Card> tempCardList = getDeckList();
             bool isValid = validateDeck(tempCardList);
             JsonResult result;
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IEnumerable<Deck> userDecks = _db.Decks.Where(deck => deck.YGWebUserId == userId);
+            if (doesDeckExist(userDecks))
+            {
+                isValid = false;
+                return new JsonResult("Deck Exists");
+            }
             if (isValid)
             {
                 var deck = new Deck();
@@ -170,6 +182,7 @@ namespace YGWeb.Controllers
                     cards += objCard.id.ToString() + "/";
                 }
                 deck.CardList = cards;
+                deck.YGWebUserId = userId;
                 _db.Decks.Add(deck);
                 _db.SaveChanges();
                 result = new JsonResult("Success");
@@ -235,6 +248,45 @@ namespace YGWeb.Controllers
             }
 
             return true;
+        }
+
+        //Given a deck, parse the string of ids and return an IEnumerable<Card>
+        public IEnumerable<Card> stringToList(string deck)
+        {
+            List<string> ids = deck.Split("/").ToList();
+            List<int> idList = ids.Select(int.Parse).ToList();
+            List<Card> cards = new List<Card>();
+            foreach (int id in idList)
+            {
+                Card card = _db.Cards.FirstOrDefault(c => c.id == id);
+                cards.Add(card);
+            }
+            IEnumerable<Card> newDeck = cards.OrderBy(card => card.name);
+            return cards.OrderBy(card => card.name);
+        }
+
+        public string listToString(IEnumerable<Card> cardList)
+        {
+            string cards = "";
+            foreach (Card objCard in cardList)
+            {
+                cards += objCard.id.ToString() + "/";
+            }
+            return cards.Remove(cards.Length - 1);
+        }
+
+        //Check the user already has a deck that matches the current deck
+        public bool doesDeckExist(IEnumerable<Deck> decks)
+        {
+            string currentDeck = listToString(getDeckList());
+            foreach (Deck deck in decks)
+            {
+                if (deck.CardList.Equals(currentDeck))
+                {
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

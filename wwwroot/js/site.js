@@ -30,7 +30,15 @@ saveDeck = (url) => {
         type: 'POST',
         url: url,
         success: function (res) {
-            alert("Deck Saved Successfully");
+            if (res == "Failure") {
+                alert("Deck could not be saved. Verify length and number of cards");
+            }
+            else if (res == "Deck Exists"){
+                alert("Deck already exists. Changes were not saved");
+            }
+            else {
+                alert("Deck Saved Successfully");
+            }
         }
     })
 };

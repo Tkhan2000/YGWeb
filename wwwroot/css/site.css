@@ -20,3 +20,9 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.container {
+    min-width: 100%;
+    display: flex;
+    justify-content: center;
+}

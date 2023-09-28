@@ -224,6 +224,28 @@ namespace YGWeb.Migrations.YGWebAuthDb
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("YGWeb.Models.Deck", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CardList")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("YGWebUserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("YGWebUserId");
+
+                    b.ToTable("Deck");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole", null)
@@ -273,6 +295,18 @@ namespace YGWeb.Migrations.YGWebAuthDb
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("YGWeb.Models.Deck", b =>
+                {
+                    b.HasOne("YGWeb.Areas.Identity.Data.YGWebUser", null)
+                        .WithMany("savedDecks")
+                        .HasForeignKey("YGWebUserId");
+                });
+
+            modelBuilder.Entity("YGWeb.Areas.Identity.Data.YGWebUser", b =>
+                {
+                    b.Navigation("savedDecks");
                 });
 #pragma warning restore 612, 618
         }
