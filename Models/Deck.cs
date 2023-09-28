@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Runtime.InteropServices;
 
 namespace YGWeb.Models
 {
@@ -8,10 +9,11 @@ namespace YGWeb.Models
         
         [Key]
         public int Id { get; set; }
-
         [Required]
         public string CardList { get; set; }
         [Required]
         public string YGWebUserId { get; set; }
+        [Required]
+        public string Name { get; set; }
     }
 }

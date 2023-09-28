@@ -1,4 +1,4 @@
-﻿@model Tuple<YGWeb.Models.Card[], IEnumerable<Card>>
+﻿@model Tuple<YGWeb.Models.Card[], IEnumerable<Card>, IEnumerable<Deck>>
 @{
     ViewData["Title"] = "DeckBuilder";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -19,16 +19,23 @@
 
     IEnumerable<Card> tempCardList = Model.Item2;
     IEnumerable<Card> baseCardList = Model.Item1;
+    IEnumerable<Deck> userDecks = Model.Item3;
 
-    //Seperate tempCardList by normal deck and extra deck
+    // Use List of keywords to split the deck into main deck and extra
     List<string> extraDeckMonster = new List<string>(new string[] { "Fusion", "Synchro", "XYZ", "Link" });
+    IEnumerable<Card> mainDeck = tempCardList.Where(card => extraDeckMonster.Any(keyword => !card.type.Contains(keyword)));
+    IEnumerable<Card> extraDeck = tempCardList.Where(card => extraDeckMonster.Any(keyword => card.type.Contains(keyword)));
 
     Card[] deckList = new Card[60];
-    for (int i = 0; i < tempCardList.Count(); i++)
+    Card[] extraList = new Card[20];
+    for (int i = 0; i < mainDeck.Count(); i++)
     {
-        deckList[i] = tempCardList.ElementAt(i);
+        deckList[i] = mainDeck.ElementAt(i);
     }
-    
+    for (int i = 0; i < extraDeck.Count(); i++)
+    {
+        extraList[i] = extraDeck.ElementAt(i);
+    }
 }
 
 <style>
@@ -38,8 +45,8 @@
     }
 </style>
 
-<div class="p-3 m-3">
-    <h1> Deck Builder </h1>
+<div class="row p-2" style="background-color:rgba(80,80,80,10);text-align:center">
+    <h1 style="color:aliceblue"> Deck Builder </h1>
 </div>
 
 
@@ -123,15 +130,23 @@
         </div>
     </div>
 
-    <div class="column w-50 p-2" style="background-color:rgba(60,60,60,50);outline:0.01em solid black;">
-        @Html.TextBox("deckName", "Deck Name Here")
-        <table class="table table-bordered table-striped p-2" style="width:100%;aspect-ratio:1/1.25;table-layout:fixed">
-            @for (int row = 0; row < 10; row++)
+    <div class="column w-50 p-2" style="background-color:rgba(60,60,60,50);outline:0.01em solid black;height:auto;overflow:auto;">
+        <div class="row">
+            <div class="col-6" style="display:flex;justify-content:center;align-content:center;flex-direction:column">
+                @Html.TextBox("deckName", "Deck Name Here")
+            </div>
+            <div class="col-6 text-end">
+                <a class="btn btn-primary" onclick="showInPopup('@Url.Action("SavedDecks", "Card", null, Context.Request.Scheme)', 'Saved Decks')">Load Decks</a>
+            </div>
+        </div>
+        
+        <table class="table table-bordered table-striped p-2" style="width:100%;table-layout:fixed">
+            @for (int row = 0; row < 6; row++)
             {
                 <tr class="p-0" style="height:100px">
-                @for(int col = 0; col < 6; col++)
+                @for(int col = 0; col < 10; col++)
                 {
-                        int index = row * 6 + col;
+                        int index = row * 10 + col;
                         @if (deckList[index] != null)
                         {
                             Card card = deckList[index];
@@ -147,6 +162,31 @@
                             <td></td>
                         }
                 }
+                </tr>
+            }
+        </table>
+        <table class="table table-bordered table-striped p-2" style="width:100%;table-layout:fixed">
+            @for (int row = 0; row < 2; row++)
+            {
+                <tr class="p-0" style="height:100px">
+                    @for (int col = 0; col < 10; col++)
+                    {
+                        int index = row * 10 + col;
+                        @if (extraList[index] != null)
+                        {
+                            Card card = extraList[index];
+                            int cardCount = tempCardList.Count(c => c.id == card.id);
+                            <td>
+                                <a onclick="showInPopup('@Url.Action("CardDetails", "Card", new {id = card.id, cardList = "Remove", searchString = ViewBag.searchString, page = ViewBag.pageNumber, count = cardCount}, Context.Request.Scheme)', 'Card Details')" class="btn btn-success" style="padding:0">
+                                    <img src="@card.image_url" style="width:100%" />
+                                </a>
+                            </td>
+                        }
+                        else
+                        {
+                            <td></td>
+                        }
+                    }
                 </tr>
             }
         </table>

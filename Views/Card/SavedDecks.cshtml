@@ -1,0 +1,60 @@
+﻿@using static YGWeb.Models.Card;
+@using static YGWeb.Models.Deck;
+
+@model Tuple<IEnumerable<Deck>, List<IEnumerable<Card>>>
+@{
+    ViewData["Title"] = "Saved Decks";
+    Layout = null;
+    IEnumerable<Deck> userDecks = Model.Item1;
+    List<IEnumerable<Card>> fullCardList = Model.Item2;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+    </style>
+</head>
+<body>
+    <div class="container p-2">
+        <table class="table table-bordered table-striped p-4 mb-0">
+            <thead class="p-2" style="text-align:center"> 
+                <tr class="p-4">
+                    <th>
+                        Deck Name
+                    </th>
+                    <th>
+                        Cards
+                    </th>
+                </tr>
+            </thead>
+            <tbody style="text-align:center">
+                @for (int i = 0; i < userDecks.Count(); i++)
+                {
+                    Deck deck = userDecks.ElementAt(i);
+                    <tr class="text-start">
+                        <td>
+                            @deck.Name
+                        </td>
+                        @{
+                            IEnumerable<Card> sampleCards = fullCardList.ElementAt(i).Distinct().OrderBy(card => card.type).ThenBy(card => card.name).Take(10);
+                        }
+                        <td>
+                            @foreach (Card card in sampleCards)
+                            {
+                                <img src="@card.image_url" height="100">
+                            }
+                        </td>
+                    </tr>
+                    <a class="btn btn-success m-2" style="display:flex;justify-content:center;flex-direction:column" 
+                    asp-action="clearDeck" asp-controller="Card" asp-route-s="" asp-route-p="1" asp-route-deck="@deck.CardList">
+                         Load Deck
+                     </a>
+                }
+            </tbody>
+        </table>
+        
+    </div>
+    
+</body>

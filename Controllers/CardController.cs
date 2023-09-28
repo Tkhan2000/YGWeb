@@ -34,18 +34,6 @@ namespace YGWeb.Controllers
              * and modifies database accordingly
             */
             IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
-            /*
-            IEnumerable<Card> cardList = _db.Cards.Take(40);
-            var deck = new Deck();
-            string cards = "";
-            foreach(Card objCard in objCardList)
-            {
-                cards += objCard.id.ToString() + "/";
-            }
-            deck.CardList = cards;
-            _db.Decks.Add(deck);
-            _db.SaveChanges();
-            */
             int pageNumber = page ?? 1;
 
             if (!String.IsNullOrEmpty(searchString))
@@ -79,6 +67,8 @@ namespace YGWeb.Controllers
         {
             IEnumerable<Card> objCardList = _db.Cards;
             IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IEnumerable<Deck> userDecks = _db.Decks.Where(deck => deck.YGWebUserId == userId);
 
             List<Card> cardList = _db.Cards.ToList();
             foreach(Card card in baseCardList)
@@ -108,7 +98,7 @@ namespace YGWeb.Controllers
 
             var currentPage = chunks.ElementAt(pageNumber - 1);
 
-            return View(Tuple.Create(currentPage, tempCardList));
+            return View(Tuple.Create(currentPage, tempCardList, userDecks));
         }
 
         public IActionResult addCard(int id, string s, int p, int c)
@@ -139,7 +129,7 @@ namespace YGWeb.Controllers
             return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
 
-        public IActionResult clearDeck(string s, int p)
+        public IActionResult clearDeck(string s, int p, string deck)
         {
             IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
 
@@ -156,6 +146,16 @@ namespace YGWeb.Controllers
                 _db.SaveChanges();
                 _db.Cards.Add(obj);
                 _db.SaveChanges();
+            }
+
+            if (deck != null)
+            {
+                IEnumerable<Card> cards = stringToList(deck);
+                foreach (Card obj in cards)
+                {
+                    _db.Cards.Add(obj);
+                    _db.SaveChanges();
+                }
             }
             return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
@@ -205,6 +205,20 @@ namespace YGWeb.Controllers
             ViewBag.count = count;
             Card card = _db.Cards.FirstOrDefault(card => card.id == id);
             return View(card);
+        }
+
+        public IActionResult SavedDecks()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            IEnumerable<Deck> userDecks = _db.Decks.Where(deck => deck.YGWebUserId == userId);
+            List<IEnumerable<Card>> fullCardList = new List<IEnumerable<Card>>();
+
+            foreach (var deck in userDecks)
+            {
+                IEnumerable<Card> cardList = stringToList(deck.CardList);
+                fullCardList.Add(cardList);
+            }
+            return View(Tuple.Create(userDecks, fullCardList));
         }
 
         public IEnumerable<Card> getDeckList() 
