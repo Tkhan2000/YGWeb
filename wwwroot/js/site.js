@@ -29,6 +29,9 @@ saveDeck = (url) => {
     $.ajax({
         type: 'POST',
         url: url,
+        ddata: {
+            name: $("#deckName").val()
+        },
         success: function (res) {
             if (res == "Failure") {
                 alert("Deck could not be saved. Verify length and number of cards");

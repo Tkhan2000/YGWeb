@@ -263,3 +263,4 @@ C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\Mi
 C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\obj\Debug\net7.0\YGWeb.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\TomKh\Documents\Assignments\Personal Projects\YGWeb\bin\Debug\net7.0\AspNetCore.Unobtrusive.Ajax.dll

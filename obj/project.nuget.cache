@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "lHHry9Z4UVRH8n8saCku0nylniX1jntVQhwH2ddm6HqYfdiVjdZLZvXVRhB5xScUz1lcCLrDdSxvxoxzmhYOXQ==",
+  "dgSpecHash": "8ufUj+pfw8JG+ssBbueJHg+NAUxgUToHZ8oqT3U9EGSw6QZV727vxil+F1VxV7hNBZTVVZR7rvmkKubry5RVpQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\TomKh\\Documents\\Assignments\\Personal Projects\\YGWeb\\YGWeb.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\TomKh\\.nuget\\packages\\aspnetcore.unobtrusive.ajax\\2.0.0\\aspnetcore.unobtrusive.ajax.2.0.0.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\azure.core\\1.25.0\\azure.core.1.25.0.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\azure.identity\\1.7.0\\azure.identity.1.7.0.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\humanizer\\2.14.1\\humanizer.2.14.1.nupkg.sha512",
@@ -111,6 +112,7 @@
     "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.identitymodel.protocols\\6.24.0\\microsoft.identitymodel.protocols.6.24.0.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\6.24.0\\microsoft.identitymodel.protocols.openidconnect.6.24.0.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.identitymodel.tokens\\6.24.0\\microsoft.identitymodel.tokens.6.24.0.nupkg.sha512",
+    "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.jquery.unobtrusive.ajax\\3.2.6\\microsoft.jquery.unobtrusive.ajax.3.2.6.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.net.stringtools\\17.3.2\\microsoft.net.stringtools.17.3.2.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\TomKh\\.nuget\\packages\\microsoft.netcore.targets\\1.1.0\\microsoft.netcore.targets.1.1.0.nupkg.sha512",

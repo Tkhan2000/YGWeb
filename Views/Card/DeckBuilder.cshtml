@@ -131,9 +131,12 @@
     </div>
 
     <div class="column w-50 p-2" style="background-color:rgba(60,60,60,50);outline:0.01em solid black;height:auto;overflow:auto;">
+        
         <div class="row">
             <div class="col-6" style="display:flex;justify-content:center;align-content:center;flex-direction:column">
-                @Html.TextBox("deckName", "Deck Name Here")
+                <div class="card-header">
+                    <h3> Main Deck</h3>
+                </div>
             </div>
             <div class="col-6 text-end">
                 <a class="btn btn-primary" onclick="showInPopup('@Url.Action("SavedDecks", "Card", null, Context.Request.Scheme)', 'Saved Decks')">Load Decks</a>
@@ -165,6 +168,9 @@
                 </tr>
             }
         </table>
+        <div class="card-header">
+            <h3> Extra Deck</h3>
+        </div>
         <table class="table table-bordered table-striped p-2" style="width:100%;table-layout:fixed">
             @for (int row = 0; row < 2; row++)
             {
@@ -195,11 +201,20 @@
                 <a class="btn btn-warning" asp-action="clearDeck" asp-route-s="@ViewBag.searchString" asp-route-p="@ViewBag.pageNumber"> Clear Deck</a>
             </div>
             <div class="col-6 text-end">
-                <a class="btn btn-success" onclick="saveDeck('@Url.Action("saveDeck", "Card")')"> Save Deck</a>
+                @using (Html.BeginForm("saveDeck", "Card", new { s = ViewBag.searchString, p = ViewBag.pageNumber }))
+                {
+                    @Html.TextBox("name", "Deck Name Here")
+                    <button class="btn btn-success" type="submit"> Save Deck</button>
+                }
+                @if (ViewBag.message != "")
+                {
+                    string col = ViewBag.message.Contains("Error") ? "red" : "green";
+                    <p style="color:@col">@ViewBag.message</p>
+                }
             </div>
         </div>
         
-        
+
     </div>
     
 </div>

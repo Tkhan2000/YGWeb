@@ -63,7 +63,7 @@ namespace YGWeb.Controllers
             return View(currentPage);
         }
         [Authorize]
-        public IActionResult DeckBuilder(string searchString, int? page)
+        public IActionResult DeckBuilder(string searchString, int? page, string message = "")
         {
             IEnumerable<Card> objCardList = _db.Cards;
             IEnumerable<Card> baseCardList = _db.Cards.Distinct().OrderBy(card => card.name);
@@ -90,6 +90,7 @@ namespace YGWeb.Controllers
             ViewBag.pageNumber = pageNumber;
             ViewBag.searchString = searchString;
             ViewBag.lastPage = _lastPage;
+            ViewBag.message = message;
 
             if (_lastPage == 0)
             {
@@ -160,39 +161,31 @@ namespace YGWeb.Controllers
             return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
         }
 
-        [HttpPost]
-        public JsonResult saveDeck()
+        public IActionResult saveDeck(string s, int p, string name)
         {
             IEnumerable<Card> tempCardList = getDeckList();
             bool isValid = validateDeck(tempCardList);
-            JsonResult result;
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             IEnumerable<Deck> userDecks = _db.Decks.Where(deck => deck.YGWebUserId == userId);
+
+            string message = "Error: Deck is not valid. Check card counts and deck length";
             if (doesDeckExist(userDecks))
             {
                 isValid = false;
-                return new JsonResult("Deck Exists");
+                message = "Error: Deck already exists";
             }
             if (isValid)
             {
                 var deck = new Deck();
-                string cards = "";
-                foreach (Card objCard in tempCardList)
-                {
-                    cards += objCard.id.ToString() + "/";
-                }
-                deck.CardList = cards;
+                deck.CardList = listToString(tempCardList);
                 deck.YGWebUserId = userId;
+                deck.Name = name;
                 _db.Decks.Add(deck);
                 _db.SaveChanges();
-                result = new JsonResult("Success");
-            }
-            else
-            {
-                result = new JsonResult("Failure");
+                message = "Deck Saved Successfully";
             }
 
-            return result;
+            return RedirectToAction("DeckBuilder", "Card", new {searchString =  s, page = p, message = message});
 
         } 
 
@@ -286,7 +279,11 @@ namespace YGWeb.Controllers
             {
                 cards += objCard.id.ToString() + "/";
             }
-            return cards.Remove(cards.Length - 1);
+            if (cards.Length > 0)
+            {
+                return cards.Remove(cards.Length - 1);
+            }
+            return cards;
         }
 
         //Check the user already has a deck that matches the current deck
