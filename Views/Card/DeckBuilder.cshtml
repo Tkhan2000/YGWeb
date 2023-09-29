@@ -23,8 +23,8 @@
 
     // Use List of keywords to split the deck into main deck and extra
     List<string> extraDeckMonster = new List<string>(new string[] { "Fusion", "Synchro", "XYZ", "Link" });
-    IEnumerable<Card> mainDeck = tempCardList.Where(card => !extraDeckMonster.Any(keyword => card.type.Contains(keyword)));
-    IEnumerable<Card> extraDeck = tempCardList.Where(card => extraDeckMonster.Any(keyword => card.type.Contains(keyword)));
+    IEnumerable<Card> mainDeck = tempCardList.Where(card => !extraDeckMonster.Any(keyword => card.type.Contains(keyword))).OrderBy(card => card.type.Replace("Union", "")).ThenBy(card => card.name);
+    IEnumerable<Card> extraDeck = tempCardList.Where(card => extraDeckMonster.Any(keyword => card.type.Contains(keyword))).OrderBy(card => card.type).ThenBy(card => card.name);
 
     Card[] deckList = new Card[60];
     Card[] extraList = new Card[20];
