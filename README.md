@@ -1,8 +1,8 @@
 # Welcome to YGWeb!
 
 This is an ASP.NET Core MVC web application that is designed to handle basic deckbuilding functions for the popular card game Yugioh. This app is designed to be very intuitive, but all of the primary features are described before. To run the web application, simply clone the repository and run using dotnet:
->git clone https://github.com/Tkhan2000/YGWeb
-
+>git clone https://github.com/Tkhan2000/YGWeb 
+\
 >dotnet -watch
 
 
