@@ -299,5 +299,13 @@ namespace YGWeb.Controllers
             }
             return false;
         }
+
+        public IActionResult deleteDeck(int id, string s, int p)
+        {
+            Deck deck = _db.Decks.FirstOrDefault(d => d.Id == id);
+            _db.Decks.Remove(deck);
+            _db.SaveChanges();
+            return RedirectToAction("DeckBuilder", new { searchString = s, page = p });
+        }
     }
 }

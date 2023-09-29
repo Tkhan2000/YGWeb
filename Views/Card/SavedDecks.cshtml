@@ -28,7 +28,7 @@
                         Cards
                     </th>
                     <th>
-                        Load
+                        Actions
                     </th>
                 </tr>
             </thead>
@@ -46,13 +46,17 @@
                         <td>
                             @foreach (Card card in sampleCards)
                             {
-                                <img src="@card.image_url" height="100">
+                                <img src="@card.image_url" height="90">
                             }
                         </td>
                         <td>
-                            <a class="btn btn-success m-2" style="display:flex;justify-content:center;flex-direction:column"
+                            <a class="btn btn-success" style="display:flex;justify-content:center;flex-direction:column"
                                asp-action="clearDeck" asp-controller="Card" asp-route-s="" asp-route-p="1" asp-route-deck="@deck.CardList">
                                 Load Deck
+                            </a>
+                            <a class="btn btn-danger" style="display:flex;justify-content:center;flex-direction:column"
+                               asp-action="deleteDeck" asp-controller="Card" asp-route-s="" asp-route-p="1" asp-route-id="@deck.Id">
+                                Delete Deck
                             </a>
                         </td>
                     </tr>

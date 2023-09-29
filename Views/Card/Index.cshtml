@@ -23,9 +23,9 @@
 <div class="border p-3 mt-4">
     @using (Html.BeginForm("Index", "Card", new{page = 1}))
     {
-        <p>
+        <h5>
             Filter Options:
-        </p>
+        </h5>
         <p>
             Find by name: @Html.TextBox("SearchString")
         </p>
