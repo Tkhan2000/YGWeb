@@ -1,17 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json.Linq;
-using NuGet.Frameworks;
-using System.Collections.Generic;
-using System.Dynamic;
-using System.Linq;
 using System.Security.Claims;
 using YGWeb.Areas.Identity.Data;
 using YGWeb.Data;
 using YGWeb.Models;
-using static YGWeb.Models.Card;
 
 namespace YGWeb.Controllers
 {
@@ -20,7 +13,6 @@ namespace YGWeb.Controllers
         private readonly ApplicationDbContext _db;
         private readonly UserManager<YGWebUser> _userManager;
         private int _lastPage;
-        private string _currentCardList = "";
         
         public CardController(ApplicationDbContext db, UserManager<YGWebUser> userManager)
         {

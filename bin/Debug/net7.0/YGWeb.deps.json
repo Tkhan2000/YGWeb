@@ -8,30 +8,16 @@
     ".NETCoreApp,Version=v7.0": {
       "YGWeb/1.0.0": {
         "dependencies": {
-          "AspNetCore.Unobtrusive.Ajax": "2.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "7.0.10",
           "Microsoft.AspNetCore.Identity.UI": "7.0.10",
           "Microsoft.EntityFrameworkCore": "7.0.11",
           "Microsoft.EntityFrameworkCore.SqlServer": "7.0.11",
           "Microsoft.EntityFrameworkCore.Tools": "7.0.11",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "7.0.9",
-          "Microsoft.jQuery.Unobtrusive.Ajax": "3.2.6",
-          "PagedList.Mvc": "4.5.0",
           "jQuery.UI.Combined": "1.13.2"
         },
         "runtime": {
           "YGWeb.dll": {}
-        }
-      },
-      "AspNetCore.Unobtrusive.Ajax/2.0.0": {
-        "dependencies": {
-          "Microsoft.Extensions.FileProviders.Embedded": "7.0.10"
-        },
-        "runtime": {
-          "lib/net6.0/AspNetCore.Unobtrusive.Ajax.dll": {
-            "assemblyVersion": "0.0.0.0",
-            "fileVersion": "0.0.0.0"
-          }
         }
       },
       "Azure.Core/1.25.0": {
@@ -1474,11 +1460,6 @@
           }
         }
       },
-      "Microsoft.jQuery.Unobtrusive.Ajax/3.2.6": {
-        "dependencies": {
-          "jQuery": "2.0.0"
-        }
-      },
       "Microsoft.NET.StringTools/17.3.2": {
         "dependencies": {
           "System.Memory": "4.5.5",
@@ -1778,25 +1759,6 @@
           "lib/netstandard2.0/NuGet.Versioning.dll": {
             "assemblyVersion": "6.6.1.2",
             "fileVersion": "6.6.1.2"
-          }
-        }
-      },
-      "PagedList/1.17.0": {
-        "runtime": {
-          "lib/net40/PagedList.dll": {
-            "assemblyVersion": "1.17.0.0",
-            "fileVersion": "1.17.0.0"
-          }
-        }
-      },
-      "PagedList.Mvc/4.5.0": {
-        "dependencies": {
-          "PagedList": "1.17.0"
-        },
-        "runtime": {
-          "lib/net40/PagedList.Mvc.dll": {
-            "assemblyVersion": "4.5.0.0",
-            "fileVersion": "4.5.0.0"
           }
         }
       },
@@ -2640,13 +2602,6 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AspNetCore.Unobtrusive.Ajax/2.0.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-hFzcqL7PWw1shrtFlm/2vUlToGruTXSijq60M4FI+0C5KKI+q2oRk0InPcO8jyuC9/nEtsLX20D1sDwhLNFeNw==",
-      "path": "aspnetcore.unobtrusive.ajax/2.0.0",
-      "hashPath": "aspnetcore.unobtrusive.ajax.2.0.0.nupkg.sha512"
-    },
     "Azure.Core/1.25.0": {
       "type": "package",
       "serviceable": true,
@@ -3396,13 +3351,6 @@
       "path": "microsoft.identitymodel.tokens/6.24.0",
       "hashPath": "microsoft.identitymodel.tokens.6.24.0.nupkg.sha512"
     },
-    "Microsoft.jQuery.Unobtrusive.Ajax/3.2.6": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-udg7ZBszgqxloQ+ShJRONKQAzPnJIlUhKZB+AIvZdKh7CDc5Nms69T9X0hN5i+NqMmQE6njkzdCcEb16lPdJTw==",
-      "path": "microsoft.jquery.unobtrusive.ajax/3.2.6",
-      "hashPath": "microsoft.jquery.unobtrusive.ajax.3.2.6.nupkg.sha512"
-    },
     "Microsoft.NET.StringTools/17.3.2": {
       "type": "package",
       "serviceable": true,
@@ -3577,20 +3525,6 @@
       "sha512": "sha512-Wm/AOFICTIrCgbVxv9dNWusraTzcggbo5W4ao7hD8NNVq911an9TGwW+uNuYc8I5PkpTeMuSXneV2u6hbi1P4w==",
       "path": "nuget.versioning/6.6.1",
       "hashPath": "nuget.versioning.6.6.1.nupkg.sha512"
-    },
-    "PagedList/1.17.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-Ou6F3WKXh49hOo0TxWM+SkIGuKllYPuPPvnSYOlQ1sTrtuEyuDUhYbSJd5Sdb06i/sWUJZTjiUecEs3Ht/Hx3g==",
-      "path": "pagedlist/1.17.0",
-      "hashPath": "pagedlist.1.17.0.nupkg.sha512"
-    },
-    "PagedList.Mvc/4.5.0": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-D0M4qW2g4a9cwG8ozIKUnJheCrm5GpFTceqUl63AXWaAVnTgk+TysZYUOGMsBRuzid8aF+/E8b0bXM6+90jiEw==",
-      "path": "pagedlist.mvc/4.5.0",
-      "hashPath": "pagedlist.mvc.4.5.0.nupkg.sha512"
     },
     "runtime.debian.8-x64.runtime.native.System.Security.Cryptography.OpenSsl/4.3.0": {
       "type": "package",
